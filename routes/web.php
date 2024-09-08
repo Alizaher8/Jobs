@@ -12,11 +12,13 @@ Route::get('/', function () {
 Route::controller(JobController::class)->group(function () {
 
     Route::get('/jobs','index');
-    Route::get('/job/create','create');
-    Route::post('/job','store');
-    Route::get('/job/{job}/edit','edit');
-    Route::patch('/job/{job}','update');
-    Route::delete('/job/{job}','destroy');
+    Route::get('/job/create','create')->middleware('auth');
+    Route::post('/job','store')->middleware('auth');
+    Route::get('/job/{job}/edit','edit')->middleware('auth','can:edit,job');
+    Route::patch('/job/{job}','update')->middleware('auth');
+    Route::delete('/job/{job}','destroy')
+       ->middleware('auth')
+       ->can('edit','job');
     Route::get('/job_item/{job}','show');
 
 });
